@@ -191,6 +191,23 @@
       overflow-wrap: anywhere;
     }
 
+    .original-message {
+      margin-top: 2rem;
+      padding: 1.25rem;
+      border-left: 2px solid var(--neon);
+      background: var(--bg);
+    }
+
+    .original-message[hidden] { display: none; }
+
+    .original-message-text {
+      color: var(--ink);
+      font-size: 0.9rem;
+      line-height: 1.7;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
     .reply-form { display: flex; flex-direction: column; gap: 2rem; }
 
     .field { position: relative; }
@@ -384,6 +401,10 @@
           <p class="aside-label">Replying to</p>
           <p class="recipient-name" id="recipientName">Client</p>
           <p class="recipient-email" id="recipientEmail">Client email will appear here</p>
+          <section class="original-message" id="originalMessage" aria-label="Original client message" hidden>
+            <p class="aside-label">Client's message</p>
+            <p class="original-message-text" id="originalMessageText"></p>
+          </section>
         </aside>
 
         <form class="reply-form" id="replyForm">
@@ -454,12 +475,19 @@
       const status = document.getElementById('status');
       const recipientName = document.getElementById('recipientName');
       const recipientEmail = document.getElementById('recipientEmail');
+      const originalMessage = document.getElementById('originalMessage');
+      const originalMessageText = document.getElementById('originalMessageText');
 
       const params = new URLSearchParams(window.location.search);
       emailInput.value = params.get('to_email') || '';
       nameInput.value = params.get('to_name') || '';
+      const clientMessage = params.get('client_message') || '';
       recipientName.textContent = nameInput.value || 'Client';
       recipientEmail.textContent = emailInput.value || 'Client email will appear here';
+      if (clientMessage) {
+        originalMessageText.textContent = clientMessage;
+        originalMessage.hidden = false;
+      }
 
       nameInput.addEventListener('input', function () {
         recipientName.textContent = nameInput.value.trim() || 'Client';

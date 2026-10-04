@@ -3,133 +3,438 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#0a0a0a">
+  <meta name="theme-color" content="#0A0A0A">
   <title>Reply to client — Anand Kumar Rai</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
     :root {
-      color-scheme: dark;
-      font-family: Inter, Arial, sans-serif;
-      background: #0a0a0a;
-      color: #f5f5f0;
-      font-synthesis: none;
+      --bg: #0A0A0A;
+      --bg-2: #141414;
+      --ink: #F5F5F0;
+      --ink-2: #8A8A85;
+      --neon: #FF2E2E;
+      --neon-dark: #D91E1E;
+      --line: #262626;
+      --font-d: 'Space Grotesk', sans-serif;
+      --font-b: 'Inter', sans-serif;
+      --gutter: 2.5rem;
+      --max: 1400px;
     }
 
-    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
 
     body {
       min-height: 100vh;
-      margin: 0;
-      padding: 32px 20px;
-      display: grid;
-      place-items: center;
-      background: radial-gradient(ellipse at top, #201111 0, #0a0a0a 55%);
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--font-b);
+      line-height: 1.5;
     }
+
+    a { color: inherit; text-decoration: none; }
+    button, input, textarea { font: inherit; }
+    button { cursor: pointer; }
+    ::selection { background: var(--neon); color: #fff; }
+
+    .container {
+      width: 100%;
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 var(--gutter);
+    }
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.15rem var(--gutter);
+      border-bottom: 1px solid var(--line);
+      background: rgba(10, 10, 10, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .nav-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: var(--font-d);
+      font-size: 0.94rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .nav-logo .mark {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--neon);
+      box-shadow: 0 0 10px var(--neon);
+    }
+
+    .nav-back {
+      color: var(--ink-2);
+      font-size: 0.74rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+
+    .nav-back:hover { color: var(--neon); }
 
     main {
-      width: min(100%, 640px);
-      padding: clamp(24px, 6vw, 48px);
-      border: 1px solid #292323;
-      background: #111;
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      padding: clamp(5rem, 12vw, 9rem) 0;
+      background: var(--bg-2);
+      border-bottom: 1px solid var(--line);
     }
 
-    .eyebrow {
-      margin: 0 0 12px;
-      color: #ff4545;
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: .16em;
+    main::before {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(255, 46, 46, 0.07), transparent 45%),
+        radial-gradient(circle at 85% 80%, rgba(255, 46, 46, 0.04), transparent 45%);
+      content: '';
+      pointer-events: none;
+    }
+
+    .reply-content { position: relative; }
+
+    .label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7rem;
+      color: var(--ink-2);
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
     }
 
-    h1 {
-      margin: 0 0 12px;
-      font-size: clamp(30px, 6vw, 44px);
-      letter-spacing: -.045em;
+    .label::before {
+      width: 22px;
+      height: 1px;
+      background: var(--neon);
+      box-shadow: 0 0 8px var(--neon);
+      content: '';
+    }
+
+    .heading {
+      margin: 1.5rem 0 1.2rem;
+      font-family: var(--font-d);
+      font-size: clamp(2.8rem, 8.5vw, 7rem);
+      font-weight: 700;
+      line-height: 0.98;
+      letter-spacing: -0.04em;
+    }
+
+    .heading .accent {
+      color: var(--neon);
+      text-shadow: 0 0 24px rgba(255, 46, 46, 0.45);
     }
 
     .intro {
-      margin: 0 0 32px;
-      color: #aaa;
+      max-width: 520px;
+      margin-bottom: clamp(2.5rem, 6vw, 4rem);
+      color: var(--ink-2);
+      font-size: clamp(1rem, 1.3vw, 1.1rem);
+      line-height: 1.7;
+    }
+
+    .reply-grid {
+      display: grid;
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: clamp(2rem, 6vw, 5rem);
+      align-items: start;
+    }
+
+    .reply-aside {
+      padding-top: 0.3rem;
+    }
+
+    .aside-label {
+      margin-bottom: 0.55rem;
+      color: var(--ink-2);
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .recipient-name {
+      margin-bottom: 1.8rem;
+      font-family: var(--font-d);
+      font-size: clamp(1.2rem, 2vw, 1.6rem);
+      font-weight: 500;
+      overflow-wrap: anywhere;
+    }
+
+    .recipient-email {
+      color: var(--ink-2);
+      font-size: 0.95rem;
+      overflow-wrap: anywhere;
+    }
+
+    .reply-form { display: flex; flex-direction: column; gap: 2rem; }
+
+    .field { position: relative; }
+
+    .field input,
+    .field textarea {
+      width: 100%;
+      padding: 1rem 0;
+      border: 0;
+      border-bottom: 1px solid var(--line);
+      outline: none;
+      background: transparent;
+      color: var(--ink);
+      font-size: 1rem;
+      transition: border-color 0.35s;
+    }
+
+    .field textarea {
+      min-height: 150px;
+      resize: vertical;
       line-height: 1.6;
     }
 
-    form { display: grid; gap: 20px; }
+    .field input::placeholder,
+    .field textarea::placeholder { color: transparent; }
 
-    label {
-      display: grid;
-      gap: 8px;
-      color: #c8c8c2;
-      font-size: 13px;
-      font-weight: 600;
+    .field label {
+      position: absolute;
+      top: 1rem;
+      left: 0;
+      color: var(--ink-2);
+      font-size: 1rem;
+      pointer-events: none;
+      transform-origin: left top;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s, font-size 0.3s;
     }
 
-    input, textarea {
-      width: 100%;
-      padding: 13px 14px;
-      border: 1px solid #363636;
-      border-radius: 2px;
-      outline: none;
-      background: #0a0a0a;
-      color: #f5f5f0;
-      font: inherit;
-      font-size: 15px;
+    .field input:focus,
+    .field textarea:focus { border-bottom-color: var(--neon); }
+
+    .field input:focus + label,
+    .field textarea:focus + label,
+    .field input:not(:placeholder-shown) + label,
+    .field textarea:not(:placeholder-shown) + label {
+      color: var(--neon);
+      transform: translateY(-1.5rem) scale(0.72);
     }
 
-    input:focus, textarea:focus { border-color: #ff4545; }
-    textarea { min-height: 180px; resize: vertical; line-height: 1.6; }
+    .form-submit {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin-top: 0.5rem;
+    }
 
-    button {
-      min-height: 48px;
-      padding: 12px 18px;
+    .submit-btn {
+      display: inline-flex;
+      min-height: 52px;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 1rem 2.1rem;
       border: 0;
-      background: #ff2e2e;
+      border-radius: 40px;
+      background: var(--neon);
       color: #fff;
-      font: inherit;
+      font-size: 0.76rem;
       font-weight: 700;
-      cursor: pointer;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      transition: transform 0.3s, background 0.3s, box-shadow 0.3s;
     }
 
-    button:hover:not(:disabled) { background: #d91e1e; }
-    button:disabled { cursor: wait; opacity: .65; }
+    .submit-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      background: var(--neon-dark);
+      box-shadow: 0 0 30px rgba(255, 46, 46, 0.55);
+    }
 
-    #status { min-height: 24px; margin: 0; font-size: 14px; }
-    #status.error { color: #ff7777; }
-    #status.success { color: #83d69a; }
+    .submit-btn:disabled { cursor: wait; opacity: 0.6; }
 
-    .back-link { display: inline-block; margin-top: 24px; color: #aaa; font-size: 13px; }
-    .back-link:hover { color: #fff; }
+    .submit-btn svg {
+      width: 15px;
+      height: 15px;
+      transition: transform 0.3s;
+    }
+
+    .submit-btn:hover:not(:disabled) svg { transform: translateX(4px); }
+
+    .form-note {
+      max-width: 230px;
+      color: var(--ink-2);
+      font-size: 0.76rem;
+      letter-spacing: 0.04em;
+      line-height: 1.5;
+    }
+
+    .form-status {
+      min-height: 1.2em;
+      color: var(--ink-2);
+      font-size: 0.85rem;
+      letter-spacing: 0.04em;
+    }
+
+    .form-status.success { color: var(--neon); }
+    .form-status.error { color: #ff5555; }
+
+    .footer {
+      padding: 2rem 0;
+      border-top: 1px solid var(--line);
+      background: var(--bg);
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-name {
+      font-family: var(--font-d);
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .footer-meta,
+    .footer-copy { color: var(--ink-2); font-size: 0.74rem; }
+
+    .footer-meta { margin-top: 0.25rem; }
+
+    .footer-socials {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .footer-socials a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      color: var(--ink-2);
+      font-size: 0.74rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+
+    .footer-socials a:hover { color: var(--neon); }
+    .footer-socials i { font-size: 1rem; }
+
+    @media (max-width: 800px) {
+      :root { --gutter: 1.5rem; }
+      .reply-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .recipient-name { margin-bottom: 0.4rem; }
+    }
+
+    @media (max-width: 600px) {
+      .navbar { padding-top: 1rem; padding-bottom: 1rem; }
+      .nav-logo { font-size: 0.8rem; }
+      .nav-back { font-size: 0.65rem; }
+      .footer-inner { align-items: flex-start; flex-direction: column; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
   </style>
 </head>
 <body>
+  <header class="navbar">
+    <a class="nav-logo" href="https://anandrai-nine.vercel.app/">
+      <span class="mark" aria-hidden="true"></span>
+      ANAND KUMAR RAI
+    </a>
+    <a class="nav-back" href="https://anandrai-nine.vercel.app/">Back to portfolio</a>
+  </header>
+
   <main>
-    <p class="eyebrow">Anand Kumar Rai · Email reply</p>
-    <h1>Reply to client</h1>
-    <p class="intro">Write your reply below. It will be sent to the client through EmailJS.</p>
+    <div class="container reply-content">
+      <span class="label">Email · Reply</span>
+      <h1 class="heading">Let's keep<br><span class="accent">in touch.</span></h1>
+      <p class="intro">Write your reply below. It will be sent directly to the client through EmailJS.</p>
 
-    <form id="replyForm">
-      <label for="to_email">
-        Client email
-        <input id="to_email" name="to_email" type="email" autocomplete="email" required>
-      </label>
-      <label for="to_name">
-        Client name
-        <input id="to_name" name="to_name" type="text" autocomplete="name">
-      </label>
-      <label for="subject">
-        Subject
-        <input id="subject" name="subject" type="text" value="Re: Your message" required>
-      </label>
-      <label for="message">
-        Your reply
-        <textarea id="message" name="message" required></textarea>
-      </label>
-      <button id="sendButton" type="submit">Send reply</button>
-      <p id="status" role="status" aria-live="polite"></p>
-    </form>
+      <div class="reply-grid">
+        <aside class="reply-aside" aria-label="Reply recipient">
+          <p class="aside-label">Replying to</p>
+          <p class="recipient-name" id="recipientName">Client</p>
+          <p class="recipient-email" id="recipientEmail">Client email will appear here</p>
+        </aside>
 
-    <a class="back-link" href="https://anandrai-nine.vercel.app/">← Back to portfolio</a>
+        <form class="reply-form" id="replyForm">
+          <div class="field">
+            <input id="to_email" name="to_email" type="email" placeholder=" " autocomplete="email" required>
+            <label for="to_email">Client email</label>
+          </div>
+          <div class="field">
+            <input id="to_name" name="to_name" type="text" placeholder=" " autocomplete="name">
+            <label for="to_name">Client name</label>
+          </div>
+          <div class="field">
+            <input id="subject" name="subject" type="text" placeholder=" " value="Re: Your message" required>
+            <label for="subject">Subject</label>
+          </div>
+          <div class="field">
+            <textarea id="message" name="message" placeholder=" " required></textarea>
+            <label for="message">Your reply</label>
+          </div>
+          <div class="form-submit">
+            <button class="submit-btn" id="sendButton" type="submit">
+              <span id="submitText">Send reply</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </button>
+            <p class="form-note">Your reply will be sent to the email address shown here.</p>
+          </div>
+          <p class="form-status" id="status" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </div>
   </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div>
+        <p class="footer-name">ANAND KUMAR RAI</p>
+        <p class="footer-meta">B.Tech Data Science · Bhopal, India</p>
+      </div>
+      <nav class="footer-socials" aria-label="Social links">
+        <a href="https://www.linkedin.com/in/anand-kumar-rai-247617332/" target="_blank" rel="noopener noreferrer">
+          <i class="fab fa-linkedin" aria-hidden="true"></i> LinkedIn
+        </a>
+        <a href="https://github.com/Yuvi000001" target="_blank" rel="noopener noreferrer">
+          <i class="fab fa-github" aria-hidden="true"></i> GitHub
+        </a>
+      </nav>
+      <p class="footer-copy">© 2026 Anand Kumar Rai</p>
+    </div>
+  </footer>
 
   <script>
     (function () {
@@ -145,11 +450,23 @@
       const subjectInput = document.getElementById('subject');
       const messageInput = document.getElementById('message');
       const sendButton = document.getElementById('sendButton');
+      const submitText = document.getElementById('submitText');
       const status = document.getElementById('status');
+      const recipientName = document.getElementById('recipientName');
+      const recipientEmail = document.getElementById('recipientEmail');
 
       const params = new URLSearchParams(window.location.search);
       emailInput.value = params.get('to_email') || '';
       nameInput.value = params.get('to_name') || '';
+      recipientName.textContent = nameInput.value || 'Client';
+      recipientEmail.textContent = emailInput.value || 'Client email will appear here';
+
+      nameInput.addEventListener('input', function () {
+        recipientName.textContent = nameInput.value.trim() || 'Client';
+      });
+      emailInput.addEventListener('input', function () {
+        recipientEmail.textContent = emailInput.value.trim() || 'Client email will appear here';
+      });
 
       if (typeof emailjs !== 'undefined') {
         emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
@@ -159,21 +476,21 @@
         event.preventDefault();
 
         if (typeof emailjs === 'undefined') {
-          status.className = 'error';
+          status.className = 'form-status error';
           status.textContent = 'Email service is unavailable. Please try again later.';
           return;
         }
 
         sendButton.disabled = true;
-        sendButton.textContent = 'Sending...';
-        status.className = '';
+        submitText.textContent = 'Sending...';
+        status.className = 'form-status';
         status.textContent = '';
 
-        const recipientEmail = emailInput.value.trim();
-        const recipientName = nameInput.value.trim() || recipientEmail;
+        const recipientAddress = emailInput.value.trim();
+        const recipientFullName = nameInput.value.trim() || recipientAddress;
         const templateParams = {
-          to_email: recipientEmail,
-          to_name: recipientName,
+          to_email: recipientAddress,
+          to_name: recipientFullName,
           from_name: OWNER_NAME,
           from_email: OWNER_EMAIL,
           reply_to: OWNER_EMAIL,
@@ -187,18 +504,18 @@
 
         emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
           .then(function () {
-            status.className = 'success';
+            status.className = 'form-status success';
             status.textContent = 'Reply sent successfully.';
             messageInput.value = '';
           })
           .catch(function (error) {
             console.error('EmailJS reply error:', error);
-            status.className = 'error';
+            status.className = 'form-status error';
             status.textContent = 'Could not send the reply. Please try again.';
           })
           .finally(function () {
             sendButton.disabled = false;
-            sendButton.textContent = 'Send reply';
+            submitText.textContent = 'Send reply';
           });
       });
     })();

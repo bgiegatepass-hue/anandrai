@@ -1606,6 +1606,7 @@ input, textarea { font-family: inherit; }
         to_email: 'anandrai5941@gmail.com',
         subject: 'New portfolio message from ' + name,
         reply_to: email,
+        reply_url: 'https://anandrai-nine.vercel.app/reply.html?to_email=' + encodeURIComponent(email),
         sent_time: new Date().toLocaleString('en-IN', {
           dateStyle: 'medium',
           timeStyle: 'short'
